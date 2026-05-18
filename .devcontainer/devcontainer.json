@@ -1,0 +1,55 @@
+{
+  "name": "Circle Court",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/circle-court",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    },
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+  "forwardPorts": [8000, 5173, 5432, 6379],
+  "portsAttributes": {
+    "8000": {
+      "label": "FastAPI backend",
+      "onAutoForward": "notify"
+    },
+    "5173": {
+      "label": "Vite frontend",
+      "onAutoForward": "openPreview"
+    },
+    "5432": {
+      "label": "Postgres"
+    },
+    "6379": {
+      "label": "Redis"
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/setup-codespace.sh",
+  "postAttachCommand": {
+    "backend": "echo 'Run backend: cd backend && ../.venv/bin/python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload'",
+    "frontend": "echo 'Run frontend: cd frontend && npm run dev -- --host 0.0.0.0'"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-azuretools.vscode-docker",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "NomicFoundation.hardhat-solidity"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/workspaces/circle-court/.venv/bin/python",
+        "editor.formatOnSave": true,
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}

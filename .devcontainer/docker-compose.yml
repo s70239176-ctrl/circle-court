@@ -1,0 +1,33 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/base:ubuntu-24.04
+    command: sleep infinity
+    volumes:
+      - ..:/workspaces/circle-court:cached
+    environment:
+      DATABASE_URL: postgresql+asyncpg://circle:circle@postgres:5432/circlecourt
+      REDIS_URL: redis://redis:6379/0
+      API_KEY: dev-circle-court-key
+      CIRCLE_SIMULATION_MODE: "true"
+      WEB3_SIMULATION_MODE: "true"
+      EMBEDDINGS_PROVIDER: hash
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: circlecourt
+      POSTGRES_USER: circle
+      POSTGRES_PASSWORD: circle
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
