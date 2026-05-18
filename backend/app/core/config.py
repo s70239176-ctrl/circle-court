@@ -40,11 +40,14 @@ class Settings(BaseSettings):
 
     @property
     def async_database_url(self) -> str:
-        if self.database_url.startswith("postgresql://"):
-            return self.database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
-        if self.database_url.startswith("postgres://"):
-            return self.database_url.replace("postgres://", "postgresql+asyncpg://", 1)
-        return self.database_url
+        url = (self.database_url or "").strip()
+        if not url:
+            return "sqlite+aiosqlite:///./circle_court.db"
+        if url.startswith("postgresql://"):
+            return url.replace("postgresql://", "postgresql+asyncpg://", 1)
+        if url.startswith("postgres://"):
+            return url.replace("postgres://", "postgresql+asyncpg://", 1)
+        return url
 
     @property
     def validator_model_list(self) -> list[str]:
