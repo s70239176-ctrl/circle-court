@@ -11,7 +11,7 @@ engine_kwargs = {"pool_pre_ping": True}
 if settings.database_url.startswith("sqlite"):
     engine_kwargs["poolclass"] = NullPool
 
-engine = create_async_engine(settings.database_url, **engine_kwargs)
+engine = create_async_engine(settings.async_database_url, **engine_kwargs)
 AsyncSessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
