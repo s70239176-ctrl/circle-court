@@ -47,6 +47,10 @@ if frontend_dir.exists():
 
 @app.on_event("startup")
 async def startup() -> None:
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-        await conn.execute(text("select 1"))
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+            await conn.execute(text("select 1"))
+    except Exception as exc:
+        import logging
+        logging.exception("Database startup initialization failed: %s", exc)
